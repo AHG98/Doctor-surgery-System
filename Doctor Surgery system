@@ -1,0 +1,188 @@
+import java.util.ArrayList;
+import java.util.Scanner;
+
+public class DoctorSurgerySystem {
+    public static void main(String[] args) {
+        ArrayList<Doctor> doctors = new ArrayList<>();
+        ArrayList<Patient> patients = new ArrayList<>();
+        
+        Doctor doc1 = new Doctor("Dr. Smith");
+        Doctor doc2 = new Doctor("Dr. Patel");
+        Doctor doc3 = new Doctor("Dr. Lee");
+        Doctor doc4 = new Doctor("Dr. Jones");
+        Doctor doc5 = new Doctor("Dr. Kim");
+
+        Patient pat1 = new Patient("John Smith");
+        Patient pat2 = new Patient("Jane Doe");
+        Patient pat3 = new Patient("Bob Johnson");
+        Patient pat4 = new Patient("Alice Lee");
+        Patient pat5 = new Patient("Mike Brown");
+        Patient pat6 = new Patient("Sarah Kim");
+        Patient pat7 = new Patient("Karen Patel");
+        Patient pat8 = new Patient("Tom Jones");
+        Patient pat9 = new Patient("David Lee");
+        Patient pat10 = new Patient("Emily Kim");
+
+        doctors.add(doc1);
+        doctors.add(doc2);
+        doctors.add(doc3);
+        doctors.add(doc4);
+        doctors.add(doc5);
+
+        patients.add(pat1);
+        patients.add(pat2);
+        patients.add(pat3);
+        patients.add(pat4);
+        patients.add(pat5);
+        patients.add(pat6);
+        patients.add(pat7);
+        patients.add(pat8);
+        patients.add(pat9);
+        patients.add(pat10);
+
+        Scanner sc = new Scanner(System.in);
+        boolean running = true;
+
+        while (running) {
+            System.out.println("=============================================");
+            System.out.println("Welcome to the doctor's surgery system!");
+            System.out.println("Please choose an option from the menu below:");
+            System.out.println("1. Register a new doctor");
+            System.out.println("2. Register a new patient");
+            System.out.println("3. Schedule an appointment");
+            System.out.println("4. View doctor's appointments");
+            System.out.println("5. View patient's appointments");
+            System.out.println("6. View all appointments");
+            System.out.println("7. Record diagnosis and treatment");
+            System.out.println("8. Exit");
+            System.out.println("=============================================");
+
+            int choice = sc.nextInt();
+            sc.nextLine();
+
+            switch (choice) {
+                case 1:
+                    System.out.print("Enter doctor name: ");
+                    String docName = sc.nextLine();
+                    Doctor newDoctor = new Doctor(docName);
+                    doctors.add(newDoctor);
+                    System.out.println("Doctor registered successfully!");
+                    break;
+                case 2:
+                    System.out.print("Enter patient name: ");
+                    String patName = sc.nextLine();
+                    Patient newPatient = new Patient(patName);
+                    patients.add(newPatient);
+                    System.out.println("Patient registered successfully!");
+                    break;
+                case 3:
+                    System.out.print("Enter doctor name: ");
+                    String schedDocName = sc.nextLine();
+                    Doctor schedDoctor = findDoctor(schedDocName, doctors);
+                    if (schedDoctor == null) {
+                        System.out.println("Doctor not found!");
+                        break;
+                    }
+
+                    System.out.print("Enter patient name: ");
+                    String schedPatName = sc.nextLine();
+                    Patient schedPatient = findPatient(schedPatName, patients);
+                    if (schedPatient == null) {
+                        System.out.println("Patient not found!");
+                        break;
+                    }
+
+                    System.out.print("Enter appointment date: ");
+                    String schedDate = sc.nextLine();
+                    Appointment newAppointment = new Appointment(schedDoctor, schedPatient, schedDate);
+                    schedDoctor.addAppointment(newAppointment);
+                    schedPatient.addAppointment
+                            (newAppointment);
+                    System.out.println("Appointment scheduled successfully!");
+                    break;
+                case 4:
+                    System.out.print("Enter doctor name: ");
+                    String docName2 = sc.nextLine();
+                    Doctor doctor2 = findDoctor(docName2, doctors);
+                    if (doctor2 == null) {
+                        System.out.println("Doctor not found!");
+                        break;
+                    }
+                    doctor2.printAppointments();
+                    break;
+                case 5:
+                    System.out.print("Enter patient name: ");
+                    String patName2 = sc.nextLine();
+                    Patient patient2 = findPatient(patName2, patients);
+                    if (patient2 == null) {
+                        System.out.println("Patient not found!");
+                        break;
+                    }
+                    patient2.printAppointments();
+                    break;
+                case 6:
+                    for (Doctor doc : doctors) {
+                        doc.printAppointments();
+                    }
+                    break;
+                case 7:
+                    System.out.print("Enter doctor name: ");
+                    String docName3 = sc.nextLine();
+                    Doctor doctor3 = findDoctor(docName3, doctors);
+                    if (doctor3 == null) {
+                        System.out.println("Doctor not found!");
+                        break;
+                    }
+
+                    System.out.print("Enter patient name: ");
+                    String patName3 = sc.nextLine();
+                    Patient patient3 = findPatient(patName3, patients);
+                    if (patient3 == null) {
+                        System.out.println("Patient not found!");
+                        break;
+                    }
+
+                    System.out.print("Enter appointment date: ");
+                    String date3 = sc.nextLine();
+                    Appointment appt3 = doctor3.findAppointment(patient3, date3);
+                    if (appt3 == null) {
+                        System.out.println("Appointment not found!");
+                        break;
+                    }
+
+                    System.out.print("Enter diagnosis: ");
+                    String diagnosis = sc.nextLine();
+                    System.out.print("Enter treatment: ");
+                    String treatment = sc.nextLine();
+                    appt3.setDiagnosis(diagnosis);
+                    appt3.setTreatment(treatment);
+                    System.out.println("Diagnosis and treatment recorded successfully!");
+                    break;
+                case 8:
+                    System.out.println("Goodbye!");
+                    running = false;
+                    break;
+                default:
+                    System.out.println("Invalid choice. Please enter a number between 1 and 8.");
+            }
+        }
+    }
+
+    public static Doctor findDoctor(String name, ArrayList<Doctor> doctors) {
+        for (Doctor doc : doctors) {
+            if (doc.getName().equalsIgnoreCase(name)) {
+                return doc;
+            }
+        }
+        return null;
+    }
+
+    public static Patient findPatient(String name, ArrayList<Patient> patients) {
+        for (Patient pat : patients) {
+            if (pat.getName().equalsIgnoreCase(name)) {
+                return pat;
+            }
+        }
+        return null;
+    }
+}
